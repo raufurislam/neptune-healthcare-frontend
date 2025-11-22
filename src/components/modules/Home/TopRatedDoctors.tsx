@@ -45,7 +45,7 @@ const DoctorCard = ({ doctor }: { doctor: (typeof doctors)[0] }) => {
           alt={doctor.name}
           width={96}
           height={96}
-          className="rounded-full border-4 border-white shadow-md"
+          className="rounded-full border-4 mx-auto border-white shadow-md"
         />
       </CardHeader>
       <CardContent className="p-6">
