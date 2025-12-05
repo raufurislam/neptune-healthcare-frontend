@@ -1,12 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { useActionState } from "react";
 import { Button } from "./ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
 
 export default function RegisterForm() {
+  const [state, formAction, isPending] = useActionState(
+    (currentState: any, formData: any) => {
+      console.log(currentState, "currentState");
+      console.log(formData.get("name"), "formData");
+
+      return { success: true };
+    },
+    null
+  );
+  console.log(state, "state", isPending, "isPending");
+
   return (
-    <form>
+    <form action={formAction}>
       <FieldGroup>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Name */}
