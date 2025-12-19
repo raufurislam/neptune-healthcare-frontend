@@ -11,16 +11,13 @@ export const loginUser = async (
       password: formData.get("password"),
     };
 
-    const res = await fetch(
-      "http://localhost:5000/api/v1/user/create-patient",
-      {
-        method: "POST",
-        body: JSON.stringify(loginData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    ).then((res) => res.json());
+    const res = await fetch("http://localhost:5000/api/v1/auth/login", {
+      method: "POST",
+      body: JSON.stringify(loginData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
 
     return res;
   } catch (error) {
