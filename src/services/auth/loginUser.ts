@@ -2,6 +2,7 @@
 "use server";
 
 import z from "zod";
+import { parse } from "cookie";
 
 const loginValidationZodSchema = z.object({
   email: z.email({
@@ -47,9 +48,17 @@ export const loginUser = async (
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((res) => res.json());
+    });
 
-    return res;
+    const result = await res.json();
+
+    const setCookieHeaders = res.headers.getSetCookie();
+
+    console.log(setCookieHeaders, "setCookies");
+
+    console.log({ res, result });
+
+    return result;
   } catch (error) {
     console.log(error);
     return { error: "Login failed!" };
