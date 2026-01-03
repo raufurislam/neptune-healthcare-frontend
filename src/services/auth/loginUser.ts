@@ -97,8 +97,9 @@ export const loginUser = async (
     cookieStore.set("accessToken", accessTokenObject.accessToken, {
       secure: true,
       httpOnly: true,
-      maxAge: parseInt(accessTokenObject.MaxAge),
+      maxAge: parseInt(accessTokenObject["Max-Age"]) || 1000 * 60 * 60,
       path: accessTokenObject.path || "/",
+      // sameSite:accessTokenObject[]
     });
 
     cookieStore.set("refreshToken", refreshTokenObject.refreshToken, {
