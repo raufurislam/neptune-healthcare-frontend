@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-type UserRole = "ADMIN" | "DOCTOR" | "PATIENT";
+
 
 // This function can be marked `async` if using `await` inside
 export function proxy(request: NextRequest) {
