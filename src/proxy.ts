@@ -38,6 +38,19 @@ const patientProtectedRoutes: RouteConfig = {
   exact: [], // "/medical-records"
 };
 
+const isAuthRoute = (pathname: string) => {
+  return authRoutes.some((route: string) => route === pathname);
+};
+
+const isRoutesMatches = (pathname: string, routes: RouteConfig): boolean => {
+  if (routes.exact.includes(pathname)) {
+    return true;
+  }
+
+  return routes.pattern.some((pattern: RegExp) => pattern.test(pathname));
+  // if pathname === /dashboard/my-appointments => matches /^\/dashboard/ => true
+};
+
 // This function can be marked `async` if using `await` inside
 export function proxy(request: NextRequest) {
   console.log("pathname", request.nextUrl.pathname);
@@ -45,8 +58,36 @@ export function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Alternatively, you can use a default export:
-// export default function proxy(request: NextRequest) { ... }
+const getRouteOwner = (
+  pathname: string
+): "ADMIN" | "DOCTOR" | "PATIENT" | "COMMON" | null => {
+  if (isRoutesMatches(pathname, adminProtectedRoutes)) {
+    return "ADMIN";
+  }
+  if (isRoutesMatches(pathname, doctorProtectedRoutes)) {
+    return "DOCTOR";
+  }
+  if (isRoutesMatches(pathname, patientProtectedRoutes)) {
+    return "PATIENT";
+  }
+  if (isRoutesMatches(pathname, commonProtectedRoutes)) {
+    return "COMMON";
+  }
+  return null;
+};
+
+const getDefaultDashboardRoute = (role: UserRole): string => {
+  if (role === "ADMIN") {
+    return "/admin/dashboard";
+  }
+  if (role === "DOCTOR") {
+    return "/doctor/dashboard";
+  }
+  if (role === "PATIENT") {
+    return "/dashboard";
+  }
+  return "/";
+};
 
 export const config = {
   matcher: "/about/:path*",
