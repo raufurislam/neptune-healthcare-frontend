@@ -51,13 +51,6 @@ const isRoutesMatches = (pathname: string, routes: RouteConfig): boolean => {
   // if pathname === /dashboard/my-appointments => matches /^\/dashboard/ => true
 };
 
-// This function can be marked `async` if using `await` inside
-export function proxy(request: NextRequest) {
-  console.log("pathname", request.nextUrl.pathname);
-
-  return NextResponse.next();
-}
-
 const getRouteOwner = (
   pathname: string
 ): "ADMIN" | "DOCTOR" | "PATIENT" | "COMMON" | null => {
@@ -88,6 +81,13 @@ const getDefaultDashboardRoute = (role: UserRole): string => {
   }
   return "/";
 };
+
+// This function can be marked `async` if using `await` inside
+export function proxy(request: NextRequest) {
+  console.log("pathname", request.nextUrl.pathname);
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: "/about/:path*",
