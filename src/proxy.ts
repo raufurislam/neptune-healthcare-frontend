@@ -126,10 +126,21 @@ export async function proxy(request: NextRequest) {
   }
 
   // Rule 1 & 2 for open public routes and auth routes
+  if (!accessToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Rule 3 : User is trying to access common protected route
   if (routerOwner === "COMMON") {
-    if (!accessToken) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+    return NextResponse.next();
+  }
+
+  // Rule 4 : User is trying to access role based protected route
+  if (
+    routerOwner === "ADMIN" ||
+    routerOwner === "DOCTOR" ||
+    routerOwner === "PATIENT"
+  ) {
     return NextResponse.next();
   }
 
